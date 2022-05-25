@@ -74,6 +74,10 @@ def co_año(dataframe,año):
     print(newdf)
     newdf.boxplot(by="Concentración")
     plt.show()
+    #TODO terminar esta funcion 
+
+#req5
+
 
     
 
