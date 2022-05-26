@@ -80,9 +80,14 @@ def co_año(dataframe,año):
 
 def concentracion_dept(dataframe,depto):
     df=dataframe[(dataframe['Departamento'] == depto) & (dataframe['Variable'] =="PM10")]
-    newdf=df.groupby(["Anio"]).size()
-    print(newdf)
-    
+    del df["Tiempo de exposición"]
+    newdf=df.groupby(["Anio"]).mean()
+    newdf.plot(kind="bar")
+    plt.title("Concentracion promedio del material articulado menor a " + depto,size=9)
+    plt.xlabel("Año",size=9)
+    plt.ylabel("Concentración",size=9)
+    plt.show()
+
 
 
 
@@ -100,4 +105,4 @@ def crear_matriz(datos:pd.DataFrame)-> tuple:
 
     #TODO - Completar con la creación de la matriz
 x=(cargar_datos("datos_reducidos.csv"))
-print(co_año(x,2018))
+print(concentracion_dept(x,"ANTIOQUIA"))
