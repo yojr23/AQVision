@@ -78,7 +78,10 @@ def co_año(dataframe,año):
 
 #req5
 
-
+def concentracion_dept(dataframe,depto):
+    df=dataframe[(dataframe['Departamento'] == depto) & (dataframe['Variable'] =="PM10")]
+    newdf=df.groupby(["Anio"]).size()
+    print(newdf)
     
 
 
