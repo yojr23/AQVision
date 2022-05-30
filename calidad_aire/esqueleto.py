@@ -69,13 +69,12 @@ def diagrama_de_barras_mediciones_o3_mayores_a(dataframe,valor):
 
 def caja_y_bigotes_distribucion_concentraciones_CO_por_año(dataframe,año):
     df=dataframe[(dataframe['Anio'] == año) & (dataframe['Tiempo de exposición'] ==8) & (dataframe['Variable'] == "CO")]
-    newdf=df.groupby(["Concentración"]).size()
-    df.boxplot(by="Concentración")
-    print(newdf)
-    newdf.boxplot(by="Concentración")
+    df.boxplot(column="Concentración")
+    plt.xlabel(str(año))
+    plt.ylabel("Concentración")
+    plt.title("Distribucion de medidas de CO por año")
     plt.show()
-    #TODO terminar esta funcion 
-caja_y_bigotes_distribucion_concentraciones_CO_por_año(x,2002)
+
 #req5
 
 def concentraciones_anuales_PM10_por_departamento(dataframe,depto):
