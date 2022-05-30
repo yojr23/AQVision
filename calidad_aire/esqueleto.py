@@ -30,7 +30,7 @@ def diagrama_de_torta_segun_tipo_de_estacion(dataframe):
     plt.pie(x=listNumbers, labels=listLabels, autopct='%1.1f%%')
     plt.title("Distribución porcentual segun los tipos de estaciones")
     plt.show()
-
+x=cargar_datos("datos_reducidos")
 #req2
 def tendencia_medidas_por_rango_de_anios(dataframe,fecha1,fecha2):
     df = dataframe[(dataframe['Anio'] >= fecha1) & (dataframe['Anio'] <= fecha2)]
@@ -75,7 +75,7 @@ def caja_y_bigotes_distribucion_concentraciones_CO_por_año(dataframe,año):
     newdf.boxplot(by="Concentración")
     plt.show()
     #TODO terminar esta funcion 
-
+caja_y_bigotes_distribucion_concentraciones_CO_por_año(x,2002)
 #req5
 
 def concentraciones_anuales_PM10_por_departamento(dataframe,depto):
