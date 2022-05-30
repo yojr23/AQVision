@@ -30,7 +30,7 @@ def diagrama_de_torta_segun_tipo_de_estacion(dataframe):
     plt.pie(x=listNumbers, labels=listLabels, autopct='%1.1f%%')
     plt.title("Distribución porcentual segun los tipos de estaciones")
     plt.show()
-x=cargar_datos("datos_reducidos")
+x=cargar_datos("datos_reducidos.csv")
 #req2
 def tendencia_medidas_por_rango_de_anios(dataframe,fecha1,fecha2):
     df = dataframe[(dataframe['Anio'] >= fecha1) & (dataframe['Anio'] <= fecha2)]
@@ -75,6 +75,7 @@ def caja_y_bigotes_distribucion_concentraciones_CO_por_año(dataframe,año):
     plt.title("Distribucion de medidas de CO por año")
     plt.show()
 
+
 #req5
 
 def concentraciones_anuales_PM10_por_departamento(dataframe,depto):
@@ -101,14 +102,31 @@ def crear_matriz(datos:pd.DataFrame)-> tuple:
     deptos = sorted(datos["Departamento"].unique())
     #Diccionario con el nombre de las filas (Deptos)
     dept_dict = dict(list(enumerate(deptos)))
-    matrix=[]
-    for i in range(len((dept_dict))):
+    matrix = []
+    for i in range(len(dept_dict)):
         listaNew=[]
         matrix.append(listaNew)
-        for j in range(len((ICAs_dict))):
+        for j in range(len(ICAs_dict)):
             listaNew.append(0)
     for z in datos.index:
         deptoEnlista = deptos.index(datos["Departamento"][z])
         IcaEnlista = ICAs.index(datos["ICA"][z])
         matrix[deptoEnlista][IcaEnlista]+=1
-    return(matrix,dept_dict,ICAs_dict)
+    return matrix, ICAs_dict, dept_dict
+z=crear_matriz(x)
+
+#req 7
+def encontrar_departamento_con_mas_mediciones(matriz, dept_dict):
+    mayor=0
+    mayorIndex=0
+    for i in matriz:
+        if sum(i)>mayor:
+            mayor=sum(i)
+            mayorIndex=matriz.index(i)
+    return dept_dict[mayorIndex]
+        
+(encontrar_departamento_con_mas_mediciones(z[0],z[2]))
+
+
+
+    
