@@ -7,7 +7,7 @@ def cargar_datos(archivo:str)->pd.DataFrame:
 
 #req1
 
-def tipos_estaciones(dataframe):
+def diagrama_de_torta_segun_tipo_de_estacion(dataframe):
     dic={"Fija":0,"Indicativa":0}
     estaciones = dataframe[ ['Nombre de la estación','Tipo de estación'] ].drop_duplicates()
     for i in estaciones.index:
@@ -32,7 +32,7 @@ def tipos_estaciones(dataframe):
     plt.show()
 
 #req2
-def tendencia_rango(dataframe,fecha1,fecha2):
+def tendencia_medidas_por_rango_de_anios(dataframe,fecha1,fecha2):
     df = dataframe[(dataframe['Anio'] >= fecha1) & (dataframe['Anio'] <= fecha2)]
     df.sort_values(by=["Anio"],inplace=True)
     dic={}
@@ -54,7 +54,7 @@ def tendencia_rango(dataframe,fecha1,fecha2):
     plt.show()
     
 #req3
-def mediciones_de_03(dataframe,valor):
+def diagrama_de_barras_mediciones_o3_mayores_a(dataframe,valor):
     df=dataframe[(dataframe['Variable'] == "O3") & (dataframe['Concentración'] > valor)]
     dept=df.groupby(["Departamento"]).size()
     dept.sort_values(inplace=True,ascending=True)
@@ -67,7 +67,7 @@ def mediciones_de_03(dataframe,valor):
 
 #req4
 
-def co_año(dataframe,año):
+def caja_y_bigotes_distribucion_concentraciones_CO_por_año(dataframe,año):
     df=dataframe[(dataframe['Anio'] == año) & (dataframe['Tiempo de exposición'] ==8) & (dataframe['Variable'] == "CO")]
     newdf=df.groupby(["Concentración"]).size()
     df.boxplot(by="Concentración")
@@ -78,7 +78,7 @@ def co_año(dataframe,año):
 
 #req5
 
-def concentracion_dept(dataframe,depto):
+def concentraciones_anuales_PM10_por_departamento(dataframe,depto):
     df=dataframe[(dataframe['Departamento'] == depto) & (dataframe['Variable'] =="PM10")]
     del df["Tiempo de exposición"]
     newdf=df.groupby(["Anio"]).mean()
@@ -104,5 +104,3 @@ def crear_matriz(datos:pd.DataFrame)-> tuple:
     dept_dict = dict(list(enumerate(deptos)))
 
     #TODO - Completar con la creación de la matriz
-x=(cargar_datos("datos_reducidos.csv"))
-print(concentracion_dept(x,"ANTIOQUIA"))
