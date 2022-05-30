@@ -124,8 +124,15 @@ def encontrar_departamento_con_mas_mediciones(matriz, dept_dict):
             mayor=sum(i)
             mayorIndex=matriz.index(i)
     return dept_dict[mayorIndex]
-        
-(encontrar_departamento_con_mas_mediciones(z[0],z[2]))
+
+def contar_cantidad_de_mediciones_con_un_ICA_dado(UserICA,matriz,ICAs_dict):
+    ICAiNDEX=(list(ICAs_dict.values()).index(UserICA))    
+    contar=0
+    for i in matriz:
+        contar+=i[ICAiNDEX]
+    return contar
+print(contar_cantidad_de_mediciones_con_un_ICA_dado("Peligrosa",z[0],z[1]))
+
 
 
 
