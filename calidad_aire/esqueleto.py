@@ -57,8 +57,8 @@ def tendencia_rango(dataframe,fecha1,fecha2):
 def mediciones_de_03(dataframe,valor):
     df=dataframe[(dataframe['Variable'] == "O3") & (dataframe['Concentración'] > valor)]
     dept=df.groupby(["Departamento"]).size()
-    dept.sort_values(inplace=True,ascending=False)
-    newdf=dept.head()
+    dept.sort_values(inplace=True,ascending=True)
+    newdf=dept.tail()
     newdf.plot(kind="barh")
     plt.xlabel("Numero de medidas superiores a "+ str(valor),size=9)
     plt.ylabel("Departamentos",size=9)
