@@ -1,5 +1,7 @@
+
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.image as mpinmg
 
 #req0 
 def cargar_datos(archivo:str)->pd.DataFrame:
@@ -131,7 +133,37 @@ def contar_cantidad_de_mediciones_con_un_ICA_dado(UserICA,matriz,ICAs_dict):
     for i in matriz:
         contar+=i[ICAiNDEX]
     return contar
-print(contar_cantidad_de_mediciones_con_un_ICA_dado("Peligrosa",z[0],z[1]))
+
+
+def mayores_mediciones_ICA_y_departamento(matrix, ICAs_dict, dept_dict):
+    mayorJotas=0
+    mayorIes=0
+    mayor=0
+    for i in range(len(matrix)):
+        for j in matrix[i]:
+            if j > mayor:
+                mayor=j
+                mayorJotas = matrix[i].index(j)
+                mayorIes = i
+    return (list(dept_dict.values())[mayorIes]),(list(ICAs_dict.values())[mayorJotas])
+print(mayores_mediciones_ICA_y_departamento(z[0],z[1],z[2]))
+
+def cargar_coordenadas(nombre_archivo):
+    deptos={}
+    archivo = open(nombre_archivo, encoding="utf8")
+    archivo.readline()
+    linea = archivo.readline
+    while len(linea)>0:
+        linea = linea.strip()
+        datos = linea.split(';')
+        deptos[datos[0].upper()] = (int(datos[1]), int(datos[2]))
+        linea= archivo.readline()
+    return deptos
+        
+
+
+
+
 
 
 
