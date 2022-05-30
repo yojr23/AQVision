@@ -100,5 +100,14 @@ def crear_matriz(datos:pd.DataFrame)-> tuple:
     deptos = sorted(datos["Departamento"].unique())
     #Diccionario con el nombre de las filas (Deptos)
     dept_dict = dict(list(enumerate(deptos)))
-
-    #TODO - Completar con la creación de la matriz
+    matrix=[]
+    for i in range(len((dept_dict))):
+        listaNew=[]
+        matrix.append(listaNew)
+        for j in range(len((ICAs_dict))):
+            listaNew.append(0)
+    for z in datos.index:
+        deptoEnlista = deptos.index(datos["Departamento"][z])
+        IcaEnlista = ICAs.index(datos["ICA"][z])
+        matrix[deptoEnlista][IcaEnlista]+=1
+    return(matrix,dept_dict,ICAs_dict)
