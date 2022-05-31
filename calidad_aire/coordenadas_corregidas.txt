@@ -1,0 +1,34 @@
+departamento;x;y
+Amazonas;480;640
+Antioquia;300;285
+Arauca;480;292
+Atlántico;316;110
+Bolívar;350;220
+Boyacá;390;340
+Caldas;300;345
+Caquetá;350;550
+Casanare;465;340
+Cauca;230;470
+Cesar;380;145
+Chocó;230;340
+Córdoba;280;220
+Cundinamarca;340;360
+Bogotá D.C.;350;385
+Guainía;580;470
+Guaviare;440;500
+Huila;290;460
+La Guajira;420;80
+Magdalena;340;140
+Meta;400;430
+Nariño;180;510
+Norte De Santander;405;220
+Putumayo;280;560
+Quindío;282;385
+Risaralda;267;352
+Archipiélago de San Andrés. Providencia y Santa Catalina;203;90
+Santander;380;285
+Sucre;317;198
+Tolima;300;400
+Valle Del Cauca;235;425
+Vaupés;500;550
+Vichada;560;370
