@@ -2,6 +2,7 @@ import matplotlib.patches as mpatches
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.image as mpinmg
+from matplotlib.patches import Rectangle
 
 #req0 
 def cargar_datos(archivo:str)->pd.DataFrame:
@@ -100,17 +101,17 @@ def crear_matriz(datos:pd.DataFrame)-> tuple:
     deptos = sorted(datos["Departamento"].unique())
     #Diccionario con el nombre de las filas (Deptos)
     dept_dict = dict(list(enumerate(deptos)))
-    matrix = []
-    for i in range(len(dept_dict)):
-        listaNew=[]
-        matrix.append(listaNew)
-        for j in range(len(ICAs_dict)):
-            listaNew.append(0)
-    for z in datos.index:
-        deptoEnlista = deptos.index(datos["Departamento"][z])
-        IcaEnlista = ICAs.index(datos["ICA"][z])
-        matrix[deptoEnlista][IcaEnlista]+=1
-    return matrix,dept_dict,ICAs_dict
+    ICAs.insert(0,"-")
+    matriz=[ICAs]
+    
+    for i in deptos:
+        lt = [i]
+        for j in range (1,len(ICAs)):
+            x=datos[(datos["Departamento"]==i) & (datos["ICA"]==ICAs[j])]
+            lt.append(len(x))    
+        matriz.append(lt)
+        
+    return (matriz, ICAs_dict, dept_dict)
 z=crear_matriz(x)
 
 #req 7
@@ -158,59 +159,56 @@ def cargar_coordenadas(nombre_archivo):
     return deptos
         
 
-def departamentos(nombre_archivo_coordenadas, nombre_archivo_mapa, info_matriz):
-    deptos=cargar_coordenadas(nombre_archivo_coordenadas)
-    #cargar mapa 
-    mapa=mpinmg.imread(nombre_archivo_mapa)
-
-    
-
-    colores = {"Buena":[36/255,226/255,41/255], "Aceptable":[254/255,253/255,56/255], "Dañina a la salud de grupos sensibles":[252/255,102/255,33/255],"Dañina a la salud":[252/255,20/255,27/255], "Muy dañina a la salud":[127/255,15/255,126/255], "Peligrosa":[101/255, 51/255, 8/255]}
-    legends = []
-    
-    for i in range(len(info_matriz[2])):
-        
-        legends.append(mpatches.Patch(color = colores[info_matriz[2][i]], label= info_matriz[2][i]))
-        plt.legend(handles = legends, loc = 3, fontsize='x-small')
-
-    
-
-    #creacion de diccionario para saber los colores
-    deptxgrp={}
-    """
-    for i in range(len(info_matriz[1])):
-        grpxdept=contar_cantidad_de_mediciones_con_un_ICA_dado(colores[i],info_matriz[0],info_matriz[1])
-        deptxgrp[info_matriz[1][i]]=grpxdept
-    """
-
-
-    for i in deptxgrp:
-        print(deptxgrp)
-        deptxgrp[i]=colores[deptxgrp[i]]
-        
-    #Mostrar imagen del mapa
-    legends = []
-    
-    
-    for i in range(0,len(info_matriz[0][0])):
-        legends.append(mpatches.Patch(color = colores[list(z[2].values())[i]], label = list(z[2].values())[i]))
-    #dibujar cuadrado
-    ax = plt.gca()
-    
-    for i in deptxgrp.keys():
-        
-        
-        rect = mpatches.Rectangle((deptos[i][1], deptos[i][0])
-        , 15
-        , 15
-        ,linewidth = 2
-        , facecolor = deptxgrp[i] )
-        ax.add_patch(rect)
-    plt.legend(handles = legends)
+def departamentos_mapa(tupla_matriz):
+    mapa = mpinmg.imread("mapa.png").tolist()
     plt.imshow(mapa)
-    plt.show()
-
-departamentos("coordenadas.txt","mapa.png",z)
+    
+    matriz, ICAs, deptos = tupla_matriz
+        
+    mat = matriz.copy()
+    dic_ICAs = {}
+        
+    for i in range(1,len(mat)):
+        ICA=""
+        valor=0
+        for j in range(1,len(mat[0])):
+            if mat[i][j]>valor:
+                valor=mat[i][j]
+                ICA=ICAs[j-1]
+            
+        dic_ICAs[mat[i][0]] = ICA
+    
+    colores = {"Buena":[36/255,226/255,41/255],
+               "Aceptable":[254/255,253/255,56/255],
+               "Dañina a la salud de grupos sensibles":[252/255,102/255,33/255],
+               "Dañina a la salud":[252/255,20/255,27/255],
+               "Muy dañina a la salud":[127/255,15/255,126/255],
+               "Peligrosa":[101/255, 51/255, 8/255]}
+    
+    legends = []
+    for i in range(1,len(matriz[0])):
+        legends.append(mpatches.Patch(color = colores[tupla_matriz[1][i-1]], label=tupla_matriz[1][i-1]))
+        plt.legend(handles=legends, loc=3, fontsize='x-small')
+    
+    dic_coord = cargar_coordenadas("coordenadas_corregidas.txt")
+        
+    for i in deptos.values():
+        if dic_ICAs[i]=="Buena":
+            plt.gca().add_patch(Rectangle((dic_coord[i][0]-6.5,dic_coord[i][1]-6.5), 13, 13, color=colores["Buena"]))
+        elif dic_ICAs[i]=="Aceptable":
+            plt.gca().add_patch(Rectangle((dic_coord[i][0]-6.5,dic_coord[i][1]-6.5), 13, 13, color=colores["Aceptable"]))
+        elif dic_ICAs[i]=="Dañina a la salud de grupos sensibles":
+            plt.gca().add_patch(Rectangle((dic_coord[i][0]-6.5,dic_coord[i][1]-6.5), 13, 13, color=colores["Dañina a la salud de grupos sensibles"]))
+        elif dic_ICAs[i]=="Dañina a la salud":
+            plt.gca().add_patch(Rectangle((dic_coord[i][0]-6.5,dic_coord[i][1]-6.5), 13, 13, color=colores["Dañina a la salud"]))
+        elif dic_ICAs[i]=="Muy dañina a la salud":
+            plt.gca().add_patch(Rectangle((dic_coord[i][0]-6.5,dic_coord[i][1]-6.5), 13, 13, color=colores["Muy dañina a la salud"]))
+        elif dic_ICAs[i]=="Peligrosa":
+            plt.gca().add_patch(Rectangle((dic_coord[i][0]-6.5,dic_coord[i][1]-6.5), 13, 13, color=colores["Peligrosa"]))
+    
+    return plt.show()
+    
+print(departamentos_mapa(crear_matriz(cargar_datos("datos_reducidos.csv"))))
 
 
 
