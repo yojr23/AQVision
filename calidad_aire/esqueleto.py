@@ -1,4 +1,4 @@
-
+import matplotlib.patches as mpatches
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.image as mpinmg
@@ -91,11 +91,7 @@ def concentraciones_anuales_PM10_por_departamento(dataframe,depto):
     plt.show()
 
 
-
-
-
-
-
+#req6
 def crear_matriz(datos:pd.DataFrame)-> tuple:
     #Esqueleto diccionarios
     ICAs =sorted(datos["ICA"].unique())
@@ -114,7 +110,7 @@ def crear_matriz(datos:pd.DataFrame)-> tuple:
         deptoEnlista = deptos.index(datos["Departamento"][z])
         IcaEnlista = ICAs.index(datos["ICA"][z])
         matrix[deptoEnlista][IcaEnlista]+=1
-    return matrix, ICAs_dict, dept_dict
+    return matrix,dept_dict,ICAs_dict
 z=crear_matriz(x)
 
 #req 7
@@ -127,6 +123,7 @@ def encontrar_departamento_con_mas_mediciones(matriz, dept_dict):
             mayorIndex=matriz.index(i)
     return dept_dict[mayorIndex]
 
+#req8
 def contar_cantidad_de_mediciones_con_un_ICA_dado(UserICA,matriz,ICAs_dict):
     ICAiNDEX=(list(ICAs_dict.values()).index(UserICA))    
     contar=0
@@ -134,7 +131,7 @@ def contar_cantidad_de_mediciones_con_un_ICA_dado(UserICA,matriz,ICAs_dict):
         contar+=i[ICAiNDEX]
     return contar
 
-
+#req9
 def mayores_mediciones_ICA_y_departamento(matrix, ICAs_dict, dept_dict):
     mayorJotas=0
     mayorIes=0
@@ -146,13 +143,13 @@ def mayores_mediciones_ICA_y_departamento(matrix, ICAs_dict, dept_dict):
                 mayorJotas = matrix[i].index(j)
                 mayorIes = i
     return (list(dept_dict.values())[mayorIes]),(list(ICAs_dict.values())[mayorJotas])
-print(mayores_mediciones_ICA_y_departamento(z[0],z[1],z[2]))
+
 
 def cargar_coordenadas(nombre_archivo):
     deptos={}
     archivo = open(nombre_archivo, encoding="utf8")
     archivo.readline()
-    linea = archivo.readline
+    linea = archivo.readline()
     while len(linea)>0:
         linea = linea.strip()
         datos = linea.split(';')
@@ -161,9 +158,59 @@ def cargar_coordenadas(nombre_archivo):
     return deptos
         
 
+def departamentos(nombre_archivo_coordenadas, nombre_archivo_mapa, info_matriz):
+    deptos=cargar_coordenadas(nombre_archivo_coordenadas)
+    #cargar mapa 
+    mapa=mpinmg.imread(nombre_archivo_mapa)
+
+    
+
+    colores = {"Buena":[36/255,226/255,41/255], "Aceptable":[254/255,253/255,56/255], "Dañina a la salud de grupos sensibles":[252/255,102/255,33/255],"Dañina a la salud":[252/255,20/255,27/255], "Muy dañina a la salud":[127/255,15/255,126/255], "Peligrosa":[101/255, 51/255, 8/255]}
+    legends = []
+    
+    for i in range(len(info_matriz[2])):
+        
+        legends.append(mpatches.Patch(color = colores[info_matriz[2][i]], label= info_matriz[2][i]))
+        plt.legend(handles = legends, loc = 3, fontsize='x-small')
+
+    
+
+    #creacion de diccionario para saber los colores
+    deptxgrp={}
+    """
+    for i in range(len(info_matriz[1])):
+        grpxdept=contar_cantidad_de_mediciones_con_un_ICA_dado(colores[i],info_matriz[0],info_matriz[1])
+        deptxgrp[info_matriz[1][i]]=grpxdept
+    """
 
 
+    for i in deptxgrp:
+        print(deptxgrp)
+        deptxgrp[i]=colores[deptxgrp[i]]
+        
+    #Mostrar imagen del mapa
+    legends = []
+    
+    
+    for i in range(0,len(info_matriz[0][0])):
+        legends.append(mpatches.Patch(color = colores[list(z[2].values())[i]], label = list(z[2].values())[i]))
+    #dibujar cuadrado
+    ax = plt.gca()
+    
+    for i in deptxgrp.keys():
+        
+        
+        rect = mpatches.Rectangle((deptos[i][1], deptos[i][0])
+        , 15
+        , 15
+        ,linewidth = 2
+        , facecolor = deptxgrp[i] )
+        ax.add_patch(rect)
+    plt.legend(handles = legends)
+    plt.imshow(mapa)
+    plt.show()
 
+departamentos("coordenadas.txt","mapa.png",z)
 
 
 
