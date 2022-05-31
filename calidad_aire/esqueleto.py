@@ -110,22 +110,29 @@ def crear_matriz(datos:pd.DataFrame)-> tuple:
             x=datos[(datos["Departamento"]==i) & (datos["ICA"]==ICAs[j])]
             lt.append(len(x))    
         matriz.append(lt)
-        
-    return (matriz, ICAs_dict, dept_dict)
+    ans=(matriz, ICAs_dict, dept_dict)   
+    return ans
 z=crear_matriz(x)
 
 #req 7
-def encontrar_departamento_con_mas_mediciones(matriz, dept_dict):
+def dar_departamento_con_mas_mediciones(tupla):
+    matriz=tupla[0]
+    depto=tupla[2]
     mayor=0
     mayorIndex=0
     for i in matriz:
-        if sum(i)>mayor:
-            mayor=sum(i)
+        print(sum(i))
+        sumatoria=sum(matriz[i][1:len(matriz[i])])
+        if sumatoria>mayor:
+            mayor=sumatoria
             mayorIndex=matriz.index(i)
-    return dept_dict[mayorIndex]
+    return depto[mayorIndex]
+print(dar_departamento_con_mas_mediciones(z))
 
 #req8
-def contar_cantidad_de_mediciones_con_un_ICA_dado(UserICA,matriz,ICAs_dict):
+def contar_numero_de_mediciones_por_ica_dado(tupla,UserICA):
+    ICAs_dict=tupla[1]
+    matriz=tupla[0]
     ICAiNDEX=(list(ICAs_dict.values()).index(UserICA))    
     contar=0
     for i in matriz:
@@ -133,12 +140,16 @@ def contar_cantidad_de_mediciones_con_un_ICA_dado(UserICA,matriz,ICAs_dict):
     return contar
 
 #req9
-def mayores_mediciones_ICA_y_departamento(matrix, ICAs_dict, dept_dict):
+def mayores_mediciones_ica_y_departamento(tupla):
+    matrix=tupla[0]
+    ICAs_dict=tupla[1]
+    dept_dict=tupla[2]
     mayorJotas=0
     mayorIes=0
     mayor=0
     for i in range(len(matrix)):
         for j in matrix[i]:
+            print(j)
             if j > mayor:
                 mayor=j
                 mayorJotas = matrix[i].index(j)
@@ -158,7 +169,7 @@ def cargar_coordenadas(nombre_archivo):
         linea= archivo.readline()
     return deptos
         
-
+#req10
 def departamentos_mapa(tupla_matriz):
     mapa = mpinmg.imread("mapa.png").tolist()
     plt.imshow(mapa)
@@ -208,7 +219,7 @@ def departamentos_mapa(tupla_matriz):
     
     return plt.show()
     
-print(departamentos_mapa(crear_matriz(cargar_datos("datos_reducidos.csv"))))
+
 
 
 
