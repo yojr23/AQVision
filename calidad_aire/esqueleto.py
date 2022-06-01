@@ -34,6 +34,7 @@ def diagrama_de_torta_segun_tipo_de_estacion(dataframe):
     plt.title("Distribución porcentual segun los tipos de estaciones")
     plt.show()
 x=cargar_datos("datos_reducidos.csv")
+print(x)
 #req2
 def tendencia_medidas_por_rango_de_anios(dataframe,fecha1,fecha2):
     df = dataframe[(dataframe['Anio'] >= fecha1) & (dataframe['Anio'] <= fecha2)]
@@ -120,9 +121,9 @@ def dar_departamento_con_mas_mediciones(tupla):
     depto=tupla[2]
     mayor=0
     mayorIndex=0
-    for i in matriz:
+    for i in matriz[0]:
         print(sum(i))
-        sumatoria=sum(matriz[i][1:len(matriz[i])])
+        sumatoria=sum(matriz[0][i][1:len(matriz[0][i])])
         if sumatoria>mayor:
             mayor=sumatoria
             mayorIndex=matriz.index(i)
@@ -147,12 +148,12 @@ def mayores_mediciones_ica_y_departamento(tupla):
     mayorJotas=0
     mayorIes=0
     mayor=0
-    for i in range(len(matrix)):
+    for i in range(len(matrix[0])):
         for j in matrix[i]:
             print(j)
             if j > mayor:
                 mayor=j
-                mayorJotas = matrix[i].index(j)
+                mayorJotas = matrix[0][i].index(j)
                 mayorIes = i
     return (list(dept_dict.values())[mayorIes]),(list(ICAs_dict.values())[mayorJotas])
 
